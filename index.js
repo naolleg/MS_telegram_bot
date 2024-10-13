@@ -4,6 +4,11 @@ const bot = new TelegramBot(token, {polling: true});
 const { google } = require('googleapis');
 const table = require('table');
 const fs = require('fs');
+require('dotenv').config();
+
+const token = process.env.TOKEN;
+const naollegChatId = process.env.NAOLLEG_CHAT_ID;
+const spreadsheetId = process.env.SPREADSHEET_ID;
 
 const auth = new google.auth.GoogleAuth({
   keyFile: 'google-credentials.json',
