@@ -17,7 +17,8 @@
     "url": "https://github.com/naolleg/MS_telegram_bot/issues"
   },
   "homepage": "https://github.com/naolleg/MS_telegram_bot#readme",
- "dependencies": {
+  "dependencies": {
+    "dotenv": "^16.4.5",
     "fs": "^0.0.1-security",
     "google-auth-library": "^7.4.1",
     "googleapis": "^144.0.0",

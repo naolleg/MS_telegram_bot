@@ -1,12 +1,13 @@
 const TelegramBot = require('node-telegram-bot-api');
-const TelegramBot = require('node-telegram-bot-api');
+require('dotenv').config();
+const token = process.env.TOKEN;
 const bot = new TelegramBot(token, {polling: true});
 const { google } = require('googleapis');
 const table = require('table');
 const fs = require('fs');
-require('dotenv').config();
 
-const token = process.env.TOKEN;
+
+
 const naollegChatId = process.env.NAOLLEG_CHAT_ID;
 const spreadsheetId = process.env.SPREADSHEET_ID;
 
