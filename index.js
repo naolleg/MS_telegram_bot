@@ -1,16 +1,25 @@
 const TelegramBot = require('node-telegram-bot-api');
 const token = require('./config/token');
-const bot = new TelegramBot(token, {polling: true});
-const { google } = require('googleapis');
+const bot = new TelegramBot(token, { polling: true, port: 3000 });
 const sheetService = require('./services/googlesheet');
-const table = require('table');
 const fs = require('fs');
+const readUsernames = require("./utils/readusername");
+const express = require('express');
 
-const spreadsheetId = process.env.SPREADSHEET_ID;
 
-const auth = new google.auth.GoogleAuth({
-  keyFile: 'google-credentials.json',
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+
+// Create an Express application
+const app = express();
+const PORT = 3000;
+
+// Route to check if the bot is running
+app.get('/', (req, res) => {
+  res.send('The Telegram bot is running!');
+});
+
+// Start the Express server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 function readUsernames() {
@@ -56,7 +65,7 @@ bot.on('message', async (msg) => {
 
     if (user) {
       const rowNumber = user.row || '1'; // Default to row 1 if not specified
-      const data = await readRowFromSheet(rowNumber);
+      const data = await sheetService.readRowFromSheet(rowNumber);
 
       bot.sendMessage(chatId, data);
     } else {
