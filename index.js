@@ -2,6 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = require('./config/token');
 const bot = new TelegramBot(token, {polling: true});
 const { google } = require('googleapis');
+const sheetService = require('./services/googlesheet');
 const table = require('table');
 const fs = require('fs');
 
@@ -15,35 +16,6 @@ const auth = new google.auth.GoogleAuth({
 function readUsernames() {
   const data = fs.readFileSync('./data/usernames.json');
   return JSON.parse(data);
-}async function readRowFromSheet(rowNumber) {
-  try {
-    const sheets = google.sheets('v4');
-
-    const range = `Sheet1!1:${rowNumber}`; // Read rows 1 to rowNumber
-
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range,
-      auth,
-    });
-
-    const data = response.data.values;
-    if (data.length > 0) {
-      const headerRow = data[0];
-      const userRow = data[rowNumber - 1]; // Adjust the index to get the correct row
-
-      const formattedData = headerRow.map((header, index) => {
-        return `${header} - ${userRow[index]}`;
-      }).join('\n');
-
-      return formattedData;
-    } else {
-      return 'No data found in the spreadsheet.';
-    }
-  } catch (err) {
-    console.error('Error reading data from sheet:', err);
-    throw err;
-  }
 }
 bot.on('callback_query', (callbackQuery) => {
   const chatId = callbackQuery.message.chat.id;
